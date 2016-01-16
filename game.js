@@ -41,9 +41,10 @@ var getBasisCubeLong = function(){
     for(var i=0;i<4;i++) {
         var left = getElementLeft(basisCubeStr[i]);
         var top = getElementTop(basisCubeStr[i]);
-        CUBEGAME.basisCubeLong[i][0] = left + 'px';
-        CUBEGAME.basisCubeLong[i][1] = top + 'px';
-        //console.log("(" + top + "," + left + ")");
+        CUBEGAME.basisCubeLong[i][0] = left-CUBEGAME.long-4 + 'px';
+        CUBEGAME.basisCubeLong[i][1] = top-CUBEGAME.long-4 + 'px';
+        console.log(basisCubeStr[i]);
+        console.log("(" + top + "," + left + ")");
     }
 };
 
@@ -67,6 +68,7 @@ CUBEGAME.imageType = '';
 definedStr(CUBEGAME.basisCubeLong,4);
 CUBEGAME.moveCube = $$$ID('moveCube');
 var cubeSingle = new Array();
+
 
 
 CUBEGAME.printStr = function(){
@@ -99,10 +101,10 @@ CUBEGAME.createBasisCube = function(n){
             break;
     }
     var node = document.createElement('img');
-    node.setAttribute('src', './img/'+CUBEGAME.imageType+n+'.png');
-    console.log(x,y);
     node.style.left = x;
     node.style.top = y;
+    node.setAttribute('src', './img/'+CUBEGAME.imageType+n+'.png');
+    console.log(x,y);
     this.moveCube.appendChild(node);
     return node;
 };
@@ -110,7 +112,6 @@ CUBEGAME.createBasisCube = function(n){
 
 CUBEGAME.move = function(x,y,n){
     var target = getTargetLong(cubeSingle[x][y]);
-    console.log(cubeSingle[x][y]);
     var node = this.createBasisCube(n);
     setTimeout(function(){
         node.style.left = target.x + "px";
@@ -242,7 +243,6 @@ var showPage = $$$ID('showPage');
 var basisCubeBlock = $$$ID('basisCubeBlock');
 var moveCube = $$$ID("moveCube");
 moveCube.style.height = document.documentElement.clientHeight + 'px';
-
 var basisCubeStr = [
     $$$ID('basisCube1'),
     $$$ID('basisCube2'),
@@ -278,12 +278,11 @@ var chooseCubeLong = function(n){
 };
 
 var addCubePage = function(n){
-    var long = chooseCubeLong(n);
     for(var i=0;i<n;i++){
         for(var j=0;j<n;j++){
             var cube = document.createElement('div');
-            cube.style.width = parseInt(long)+'px';
-            cube.style.height = parseInt(long)+'px';
+            cube.style.width = parseInt(CUBEGAME.long)+'px';
+            cube.style.height = parseInt(CUBEGAME.long)+'px';
             cube.setAttribute('class','cubeSingle');
             cubeSingle[j][i] = cube;
             cube.i = i;
@@ -343,6 +342,7 @@ var addImage = function(target){
         node.setAttribute('src', './img/'+target+(i+1)+'.png');
         basisCubeStr[i].appendChild(node);
     }
+
 };
 
 
@@ -351,12 +351,13 @@ INPUTBLOCK.isInputDone = function(){
     inputBtn.onclick = function(){
         if(judgeInput(inputText.value)){
             CUBEGAME.n = inputText.value;
-            definedStr(cubeSingle ,CUBEGAME.n);
+            CUBEGAME.long = chooseCubeLong(CUBEGAME.n);
+            getBasisCubeLong();
+            definedStr(cubeSingle, CUBEGAME.n);
             imageChoose(CUBEGAME.n);
             showCubePage(CUBEGAME.n);
             INPUTBLOCK.showInput(tip);
             this.onclick = function(){};
-            getBasisCubeLong();
         }
     };
 };
@@ -367,50 +368,4 @@ window.onload = function(){
     INPUTBLOCK.showInput(inputCubeCount);
     INPUTBLOCK.isInputDone();
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
