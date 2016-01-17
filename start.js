@@ -1,0 +1,1 @@
+INPUTBLOCK.showInput()

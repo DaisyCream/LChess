@@ -15,28 +15,37 @@ body{
     top: 40px;
 }
 
-#inputBlock{
-    width: 24%;
+#leftShow{
+    width: 52%;
 
     position: absolute;
+    top: 22%;
+    left: 7%;
+}
+
+#leftShow #inputBlock{
+    width: 50%;
+
+    position: relative;
     top: 22%;
     left: 18%;
     font-size: 18px;
 
 }
 
-#inputBlock #inputCubeCount{
-    width: 70%;
+#leftShow #inputBlock #inputCubeCount{
+    width: 100%;
     padding: 2%;
     padding-left: 0px;
     border-bottom: 2px solid #ffffff;
     position: relative;
     color: #ffffff;
     display: none;
+    -webkit-animation: showMove 1.4s;
 }
 
 
-#inputBlock #inputCubeCount #inputText{
+#leftShow #inputBlock #inputCubeCount #inputText{
     width: 25px;
     height: 20px;
     background-color: transparent;
@@ -48,7 +57,7 @@ body{
     margin-left: 5px;
 }
 
-#inputBlock #inputCubeCount #inputBtn{
+#leftShow #inputBlock #inputCubeCount #inputBtn{
     width: 50px;
     height: 24px;
     text-align: center;
@@ -62,21 +71,22 @@ body{
     color: #738e93;
 }
 
-#inputBlock #inputCubeCount #inputBtn:hover{
+#leftShow #inputBlock #inputCubeCount #inputBtn:hover{
     box-shadow: 1px 1px 3px #7b989d;
 }
 
-#inputBlock #tip{
-    width: 70%;
+#leftShow #inputBlock #tip{
+    width: 100%;
     position: relative;
     margin-top: 50px;
     padding: 4%;
     padding-left: 0px;
     color: #ffffff;
     border-bottom: 2px solid #ffffff;
+    -webkit-animation: showMove 1.4s;
 }
 
-#inputBlock #tip img{
+#leftShow #inputBlock #tip img{
     width: 36px;
     height: 36px;
     position: relative;
@@ -114,14 +124,13 @@ body{
 }
 
 
-#basisCubeBlock{
+#leftShow #basisCubeBlock{
     width: 700px;
     height: 200px;
     background-color: #ffffff;
 
-    position: absolute;
-    top: 50%;
-    left: 8%;
+    position: relative;
+    margin: 65px auto;
 
     display: flex;
     align-items: center;
@@ -130,12 +139,34 @@ body{
     -webkit-transition: opacity 1s;
 }
 
-#basisCubeBlock .basisCube{
+.basisCubeBorder{
+    padding: 2px;
 }
 
-#basisCubeBlock .basisCube img{
-    -webkit-animation: showMove 1;
+.basisCubeBorder .basisCubeFour{
+    width: 80px;
+    height: 80px;
+    border-left: 78px solid;
+    border-bottom: 78px solid;
+    border-color: #000;
+    transform: rotate(270deg);
 }
+
+.basisCubeBorder .basisCubeEight{
+    width: 40px;
+    height: 40px;
+    border-left: 38px solid;
+    border-bottom: 38px solid;
+}
+
+.basisCubeBorder .basisCubeSixteen{
+    width: 20px;
+    height: 20px;
+    border-left: 18px solid;
+    border-bottom: 18px solid;
+}
+
+
 
 
 #showPage{
@@ -151,9 +182,12 @@ body{
     box-shadow: 1px 1px 3px #394b4e;
     cursor: pointer;
     -webkit-transition: opacity 1s;
+    background-color: #394b4e;
 }
 
 #showPage .cubeSingle{
+    width: 78px;
+    height: 78px;
     background-color: #99d2dc;
     border:2px solid #ffffff;;
     position: relative;
@@ -166,9 +200,8 @@ body{
     width: 100%;
 }
 
-#moveCube img{
+#moveCube .basisCubeBorder{
     position: absolute;
-    display: block;
     -webkit-transition: top 2s,left 2s;
     z-index: 10;
 }

@@ -30,20 +30,22 @@ var getElementLeft = function(target){
 var getElementTop = function(target){
     var top = target.offsetTop;
     var current = target.offsetParent;
+    console.log(top,current);
     while(current!=null){
         top += current.offsetTop;
         current = current.offsetParent;
+        console.log(top,current);
     }
     return top;
 };
 
 var getBasisCubeLong = function(){
     for(var i=0;i<4;i++) {
-        var left = getElementLeft(basisCubeStr[i]);
-        var top = getElementTop(basisCubeStr[i]);
-        CUBEGAME.basisCubeLong[i][0] = left-CUBEGAME.long-4 + 'px';
-        CUBEGAME.basisCubeLong[i][1] = top-CUBEGAME.long-4 + 'px';
-        console.log(basisCubeStr[i]);
+        var left = getElementLeft(CUBEGAME.basisCubeStr[i]);
+        var top = getElementTop(CUBEGAME.basisCubeStr[i]);
+        CUBEGAME.basisCubeLong[i][0] = left + 'px';
+        CUBEGAME.basisCubeLong[i][1] = top + 'px';
+        console.log(CUBEGAME.basisCubeStr[i]);
         console.log("(" + top + "," + left + ")");
     }
 };
@@ -55,6 +57,76 @@ var getTargetLong = function(target){
     return direction;
 };
 
+var chooseCubeStyle = function(n){
+    switch(parseInt(n)){
+        case 4:
+            CUBEGAME.basisCubeStyle = 'basisCubeFour';
+            break;
+        case 8:
+            CUBEGAME.basisCubeStyle = 'basisCubeEight';
+            break;
+        case 16:
+            CUBEGAME.basisCubeStyle = 'basisCubeSixteen';
+            break;
+    }
+};
+
+var chooseCubeLong = function(n){
+    var long;
+    switch(parseInt(n)){
+        case 4:
+            long = 78;
+            break;
+        case 8:
+            long = 38;
+            break;
+        case 16:
+            long = 18;
+            break;
+    }
+    return long;
+};
+
+var chooseCubeDeg = function(index){
+    var deg = '';
+    switch(index){
+        case 1:
+            deg = '90deg';
+            break;
+        case 2:
+            deg = '180deg';
+            break;
+        case 3:
+            deg = '0deg';
+            break;
+        case 4:
+            deg = '270deg';
+            break;
+    }
+    return deg;
+};
+
+
+
+var chooseCubeColor = function(index){
+    var color = '';
+    switch(index){
+        case 1:
+            color = '#e6efc2';
+            break;
+        case 2:
+            color = '#a2d5ac';
+            break;
+        case 3:
+            color = '#39aea8';
+            break;
+        case 4:
+            color = '#557c83';
+            break;
+    }
+    return color;
+};
+
 /*************************CUBEGAME****************************/
 
 var CUBEGAME = function(){};
@@ -64,9 +136,11 @@ CUBEGAME.cube3 = 8;
 CUBEGAME.cube4 = 9;
 CUBEGAME.broad = new Array();
 CUBEGAME.basisCubeLong = new Array();
+CUBEGAME.basisCubeStyle = '';
 CUBEGAME.imageType = '';
 definedStr(CUBEGAME.basisCubeLong,4);
 CUBEGAME.moveCube = $$$ID('moveCube');
+CUBEGAME.basisCubeStr = new Array();
 var cubeSingle = new Array();
 
 
@@ -80,7 +154,7 @@ CUBEGAME.printStr = function(){
 };
 
 
-CUBEGAME.createBasisCube = function(n){
+CUBEGAME.createMoveCube = function(n){
     var x,y;
     switch (n){
         case 1:
@@ -100,19 +174,17 @@ CUBEGAME.createBasisCube = function(n){
             y = this.basisCubeLong[3][1];
             break;
     }
-    var node = document.createElement('img');
+    var node = addCubeBorder(moveCube,n);
     node.style.left = x;
     node.style.top = y;
-    node.setAttribute('src', './img/'+CUBEGAME.imageType+n+'.png');
     console.log(x,y);
-    this.moveCube.appendChild(node);
     return node;
 };
 
 
 CUBEGAME.move = function(x,y,n){
     var target = getTargetLong(cubeSingle[x][y]);
-    var node = this.createBasisCube(n);
+    var node = this.createMoveCube(n);
     setTimeout(function(){
         node.style.left = target.x + "px";
         node.style.top = target.y + 'px';
@@ -243,12 +315,6 @@ var showPage = $$$ID('showPage');
 var basisCubeBlock = $$$ID('basisCubeBlock');
 var moveCube = $$$ID("moveCube");
 moveCube.style.height = document.documentElement.clientHeight + 'px';
-var basisCubeStr = [
-    $$$ID('basisCube1'),
-    $$$ID('basisCube2'),
-    $$$ID('basisCube3'),
-    $$$ID('basisCube4')
-];
 
 
 
@@ -259,23 +325,6 @@ INPUTBLOCK.showInput = function(target){
     target.style.webkitAnimation = 'showMove 1.5s';
 };
 
-var showCubePage = function(n){
-    addCubePage(n);
-    showPage.style.opacity = 1;
-};
-
-var chooseCubeLong = function(n){
-    var long;
-    switch(parseInt(n)){
-        case 4:
-            long = 78;
-            break;
-        case 8:
-            long = 38;
-            break;
-    }
-    return long;
-};
 
 var addCubePage = function(n){
     for(var i=0;i<n;i++){
@@ -304,11 +353,16 @@ var addCubePage = function(n){
 
     }
 
+};
 
+
+var showCubePage = function(n){
+    addCubePage(n);
+    showPage.style.opacity = 1;
 };
 
 var judgeInput = function(value){
-    if(value!=0){
+    if(value!=null){
         if(value!=4&&value!=8&&value!=16){
             alert("Input wrong!please write(4 or 8 or 16)");
             location.reload();
@@ -322,42 +376,79 @@ var judgeInput = function(value){
 };
 
 
-var imageChoose = function(n){
-    switch(parseInt(n)){
-        case 4:
-            addImage("big");
-            break;
-        case 8:
-            addImage("middle");
-            break;
+/***
+ * 添加basisCube
+ * @param obj：在哪里添加；
+ * @param index：添加第一个（一共有4个）；
+ */
+
+
+
+var addCubeInside = function(target,index){
+    var node = document.createElement('div');
+    node.setAttribute('class',CUBEGAME.basisCubeStyle);
+    node.style.transform = 'rotate('+ chooseCubeDeg(index) +')';
+    node.style.borderColor = chooseCubeColor(index);
+    target.appendChild(node);
+};
+
+
+
+var addCubeBorder = function(target,index){
+    var nodeBorder = document.createElement('div');
+    nodeBorder.setAttribute('class','basisCubeBorder');
+    addCubeInside(nodeBorder,index);
+    target.appendChild(nodeBorder);
+    return nodeBorder;
+};
+
+
+
+function createBasisCube(obj,index){
+    var node = addCubeBorder(obj,index);
+    return node;
+}
+
+
+
+
+
+/**
+ * 在basisCubeBlock这个模块添加需要的4个模块
+ * 并且让basisCubeBlock显示
+ */
+
+function addBasisCubeInBlock(){
+    for(var i=1;i<=4;i++){
+        var node = createBasisCube(basisCubeBlock,i);
+        CUBEGAME.basisCubeStr[i-1] = node;
     }
     basisCubeBlock.style.opacity = 1;
-
-};
-
-var addImage = function(target){
-    CUBEGAME.imageType = target;
-    for(var i=0;i<basisCubeStr.length;i++){
-        var node = document.createElement('img');
-        node.setAttribute('src', './img/'+target+(i+1)+'.png');
-        basisCubeStr[i].appendChild(node);
-    }
-
-};
+}
+function reStart(){
+    inputBtn.onclick = function(){
+        location.reload();
+    };
+}
 
 
 
+/***
+ * 当输入完成时，记录输入的n
+ */
 INPUTBLOCK.isInputDone = function(){
     inputBtn.onclick = function(){
         if(judgeInput(inputText.value)){
-            CUBEGAME.n = inputText.value;
-            CUBEGAME.long = chooseCubeLong(CUBEGAME.n);
-            getBasisCubeLong();
-            definedStr(cubeSingle, CUBEGAME.n);
-            imageChoose(CUBEGAME.n);
-            showCubePage(CUBEGAME.n);
-            INPUTBLOCK.showInput(tip);
-            this.onclick = function(){};
+            this.value = 'fresh';//改变start=>fresh
+            CUBEGAME.n = inputText.value;//存储k
+            CUBEGAME.long = chooseCubeLong(CUBEGAME.n);//存储长度
+            chooseCubeStyle(CUBEGAME.n);//选择basisCube模块的样式
+            definedStr(cubeSingle, CUBEGAME.n);//定义二维数组
+            INPUTBLOCK.showInput(tip);//
+            addBasisCubeInBlock();//加入模块到basisBlock中
+            getBasisCubeLong();//得到basisBlock模块中每个模块的left，top
+            showCubePage(CUBEGAME.n);//生成并显示展示表格
+            reStart();
         }
     };
 };
